@@ -1,6 +1,10 @@
 import warnings
 import numpy as np
 import pandas as pd
+import signal
+import sys
+import time
+import threading
 
 import sklearn
 
@@ -258,6 +262,17 @@ class SimpleClassifier(_BaseSimpleEstimator, ClassifierMixin):
         """
         self._rank_scoring = "recall_macro"
         return self._fit(X=X, y=y, target_col=target_col)
+    
+    
+    def signal_handler(signal, frame):
+    print('You pressed Ctrl+C!')
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+print('Press Ctrl+C')
+forever = threading.Event()
+forever.wait()
+    
 
 
 class SimpleRegressor(_BaseSimpleEstimator, RegressorMixin):
